@@ -3,19 +3,19 @@ export default class Store {
     this.storageKey = storageKey;
     this.rerenderCallback = rerenderCallback;
 
-    const { listMap, selectedItem } = this.#loadStorage() ?? {
+    const { listMap, selectedListItem } = this.#loadStorage() ?? {
       listMap: new Map(),
-      selectedItem: null,
+      selectedListItem: null,
     };
     this.listMap = listMap;
-    this.selectedItem = selectedItem;
+    this.selectedListItem = selectedListItem;
   }
 
   #loadStorage() {
     const data = JSON.parse(localStorage.getItem(this.storageKey));
     if (data) {
       const listMap = new Map(data.listMap);
-      return { listMap, selectedItem: data.selectedItem };
+      return { listMap, selectedListItem: data.selectedListItem };
     }
     return null;
   }
@@ -24,7 +24,7 @@ export default class Store {
     // 상태 저장
     const dataToSave = {
       listMap: Array.from(this.listMap),
-      selectedItem: this.selectedItem,
+      selectedListItem: this.selectedListItem,
     };
     localStorage.setItem(this.storageKey, JSON.stringify(dataToSave));
 
@@ -49,12 +49,12 @@ export default class Store {
     this.#saveStorage();
   }
 
-  getSelectedItem() {
-    return this.selectedItem;
+  getSelectedListItem() {
+    return this.selectedListItem;
   }
 
-  setSelectedItem(name) {
-    this.selectedItem = name;
+  setSelectedListItem(name) {
+    this.selectedListItem = name;
     this.#saveStorage();
   }
 

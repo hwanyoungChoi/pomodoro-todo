@@ -36,7 +36,7 @@ export default class ListSection {
   }
 
   #handleItemClick(name) {
-    this.store.setSelectedItem(name);
+    this.store.setSelectedListItem(name);
   }
 
   #handleItemDeleteButtonClick(name) {
@@ -82,7 +82,7 @@ export default class ListSection {
       const $listItem = new ListItem({
         name: key,
         todoCount: value.length,
-        isSelected: this.store.getSelectedItem() === key,
+        isSelected: this.store.getSelectedListItem() === key,
         onClick: this.#handleItemClick.bind(this),
         onDelete: this.#handleItemDeleteButtonClick.bind(this),
       });
