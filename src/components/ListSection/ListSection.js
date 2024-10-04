@@ -39,7 +39,9 @@ export default class ListSection {
   }
 
   #handleItemDeleteButtonClick(name) {
-    this.store.deleteListItem(name);
+    if (confirm(`${name}을 삭제하시겠습니까?`)) {
+      this.store.deleteListItem(name);
+    }
   }
 
   render() {
