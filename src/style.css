@@ -1,0 +1,72 @@
+body {
+  background-color: black;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+header {
+  height: 60px;
+  padding: 8px 16px;
+  box-sizing: border-box;
+  background-color: white;
+  display: flex;
+  align-items: center;
+}
+
+main {
+  margin-top: 20px;
+  display: flex;
+  gap: 20px;
+  height: 400px;
+}
+
+#list-section {
+  width: 30%;
+  background-color: white;
+  padding: 8px 16px;
+  box-sizing: border-box;
+}
+
+#list-section .title-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+#list-section ul {
+  border: 1px solid black;
+  margin-bottom: 10px;
+  max-height: 80%;
+  overflow: auto;
+}
+
+.list-item {
+  margin-bottom: 6px;
+  padding: 6px;
+  cursor: pointer;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.list-item .right {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+#todo-section {
+  width: 70%;
+  background-color: white;
+  padding: 8px 16px;
+  box-sizing: border-box;
+}
