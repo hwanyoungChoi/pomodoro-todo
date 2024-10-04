@@ -1,14 +1,15 @@
 export default class ListItem {
   /**
    * @constructor
-   * @param {string} name - 목록 아이템의 이름
-   * @param {number} todoCount - 목록 아이템에 속한 남은 할일 수
-   * @param {boolean} isEdit - 편집 전용 여부
-   * @param {Function} onClick - 목록 아이템 클릭 이벤트
-   * @param {Function} onDelete - 목록 아이템 삭제 버튼 클릭 이벤트
-   * @param {Function} onInput - 목록 이름 입력 완료 이벤트
+   * @param {Object} options - 목록 아이템의 속성
+   * @param {string} options.name - 목록 아이템의 이름
+   * @param {number} options.todoCount - 목록 아이템에 속한 남은 할일 수
+   * @param {boolean} options.isEdit - 편집 전용 여부
+   * @param {Function} options.onClick - 목록 아이템 클릭 이벤트
+   * @param {Function} options.onDelete - 목록 아이템 삭제 버튼 클릭 이벤트
+   * @param {Function} options.onInput - 목록 이름 입력 완료 이벤트
    */
-  constructor(name, todoCount, isEdit, onClick, onDelete, onInput) {
+  constructor({ name, todoCount, isEdit, onClick, onDelete, onInput }) {
     this.name = name;
     this.todoCount = todoCount;
     this.isEdit = isEdit;
@@ -37,7 +38,6 @@ export default class ListItem {
             const name = $inputField.value.trim();
             if (name && this.onInput) {
               this.onInput(name);
-              //   this.store.addListItem(name);
               this.$listItem.remove();
             }
           }

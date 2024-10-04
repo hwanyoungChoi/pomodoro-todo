@@ -20,9 +20,17 @@ export default class ListSection {
       return;
     }
 
-    const $editableListItem = new ListItem("", 0, true, null, null, (name) => {
-      this.store.addListItem(name);
+    const $editableListItem = new ListItem({
+      name: "",
+      todoCount: 0,
+      isEdit: true,
+      onClick: null,
+      onDelete: null,
+      onInput: (name) => {
+        this.store.addListItem(name);
+      },
     }).render();
+
     $list.appendChild($editableListItem);
   }
 
@@ -68,13 +76,12 @@ export default class ListSection {
     const $newList = document.createElement("ul");
 
     for (const [key, value] of this.store.getListMap()) {
-      const $listItem = new ListItem(
-        key,
-        value.length,
-        false,
-        this.#handleItemClick.bind(this),
-        this.#handleItemDeleteButtonClick.bind(this)
-      );
+      const $listItem = new ListItem({
+        name: key,
+        todoCount: value.length,
+        onClick: this.#handleItemClick.bind(this),
+        onDelete: this.#handleItemDeleteButtonClick.bind(this),
+      });
       $newList.appendChild($listItem.render());
     }
 
