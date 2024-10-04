@@ -53,22 +53,24 @@ export default class ListItem {
       this.$listItem.appendChild($name);
     }
 
-    const $deleteButton = document.createElement("button");
-    $deleteButton.setAttribute("type", "button");
-    $deleteButton.innerText = "X";
-    $deleteButton.addEventListener("click", (event) => {
-      event.stopPropagation();
-      if (this.onDelete) {
-        this.onDelete(this.name);
-      }
-    });
+    const $right = document.createElement("div");
+    $right.classList.add("right");
+
+    if (!this.isEdit) {
+      const $deleteButton = document.createElement("button");
+      $deleteButton.setAttribute("type", "button");
+      $deleteButton.innerText = "X";
+      $deleteButton.addEventListener("click", (event) => {
+        event.stopPropagation();
+        if (this.onDelete) {
+          this.onDelete(this.name);
+        }
+      });
+      $right.appendChild($deleteButton);
+    }
 
     const $todoCount = document.createElement("div");
     $todoCount.innerText = this.todoCount;
-
-    const $right = document.createElement("div");
-    $right.classList.add("right");
-    $right.appendChild($deleteButton);
     $right.appendChild($todoCount);
 
     this.$listItem.appendChild($right);
