@@ -3,20 +3,30 @@ export default class Store {
     this.storageKey = storageKey;
     this.rerenderCallback = rerenderCallback;
 
-    this.listMap = this.#loadStorage() ?? new Map();
-    this.selectedItem = null;
+    const { listMap, selectedItem } = this.#loadStorage() ?? {
+      listMap: new Map(),
+      selectedItem: null,
+    };
+    this.listMap = listMap;
+    this.selectedItem = selectedItem;
   }
 
   #loadStorage() {
     const data = JSON.parse(localStorage.getItem(this.storageKey));
-    return data ? new Map(data) : null;
+    if (data) {
+      const listMap = new Map(data.listMap);
+      return { listMap, selectedItem: data.selectedItem };
+    }
+    return null;
   }
 
   #saveStorage() {
-    localStorage.setItem(
-      this.storageKey,
-      JSON.stringify(Array.from(this.listMap))
-    );
+    // 상태 저장
+    const dataToSave = {
+      listMap: Array.from(this.listMap),
+      selectedItem: this.selectedItem,
+    };
+    localStorage.setItem(this.storageKey, JSON.stringify(dataToSave));
 
     // 데이터 갱신 시 rerender하기 위함
     if (this.rerenderCallback) {
@@ -39,13 +49,13 @@ export default class Store {
     this.#saveStorage();
   }
 
-  toggleListItem(name) {
-    if (this.selectedItem === name) {
-      this.selectedItem = null;
-      return;
-    }
+  getSelectedItem() {
+    return this.selectedItem;
+  }
 
+  setSelectedItem(name) {
     this.selectedItem = name;
+    this.#saveStorage();
   }
 
   // 할일 methods
