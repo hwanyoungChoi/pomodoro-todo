@@ -21,14 +21,12 @@ export default class Store {
   }
 
   #saveStorage() {
-    // 상태 저장
     const dataToSave = {
       listMap: Array.from(this.listMap),
       selectedListItem: this.selectedListItem,
     };
     localStorage.setItem(this.storageKey, JSON.stringify(dataToSave));
 
-    // 데이터 갱신 시 rerender하기 위함
     if (this.rerenderCallback) {
       this.rerenderCallback();
     }
@@ -46,6 +44,10 @@ export default class Store {
 
   deleteListItem(name) {
     this.listMap.delete(name);
+
+    if (name === this.selectedListItem) {
+      this.setSelectedListItem(null);
+    }
     this.#saveStorage();
   }
 

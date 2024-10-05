@@ -1,3 +1,5 @@
+import TodoItem from "./TodoItem";
+
 export default class TodoSection {
   /**
    * @constructor
@@ -10,7 +12,7 @@ export default class TodoSection {
   }
 
   #getTodoList() {
-    return this.store.getTodoListByList(this.store.getSelectedListItem());
+    return this.store.getTodoListByList(this.store.getSelectedListItem()) ?? [];
   }
 
   #getCompletedTodoCount() {
@@ -54,15 +56,22 @@ export default class TodoSection {
 
     this.$todoSection.innerHTML = "";
 
-    this.$todoSection.appendChild(this.#createTitleContainer());
+    if (this.store.getSelectedListItem()) {
+      this.$todoSection.appendChild(this.#createTitleContainer());
 
-    const $list = document.createElement("ul");
-    this.#getTodoList().forEach((todoItem) => {
-      const $listItem = document.createElement("li");
-      $listItem.innerText = todoItem.name;
-      $list.appendChild($listItem);
-    });
-    this.$todoSection.appendChild($list);
+      const $todoList = document.createElement("ul");
+
+      this.#getTodoList().forEach((todoItem) => {
+        const $todoItem = new TodoItem({
+          ...todoItem,
+        });
+        $todoList.appendChild($todoItem.render());
+      });
+
+      this.$todoSection.appendChild($todoList);
+    } else {
+      this.$todoSection.innerText = "선택 된 목록이 없습니다.";
+    }
 
     return this.$todoSection;
   }
