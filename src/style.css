@@ -111,11 +111,22 @@ main {
 
 .todo-item {
   padding: 6px;
-  cursor: pointer;
 
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+
+.todo-item .name-container.completed {
+  opacity: 0.6;
+}
+
+.todo-item .name-container label span {
+  opacity: 0.4;
+}
+
+.todo-item .name-container label em {
+  color: red;
 }
 
 #todo-item-form {

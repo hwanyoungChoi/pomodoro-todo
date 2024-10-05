@@ -105,8 +105,6 @@ export default class ListItem {
 
     if (this.isSelected) {
       this.$listItem.classList.add("selected");
-    } else {
-      this.$listItem.classList.remove("selected");
     }
 
     if (this.isEdit) {

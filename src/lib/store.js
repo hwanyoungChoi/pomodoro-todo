@@ -78,4 +78,11 @@ export default class Store {
     this.listMap.set(name, todoList);
     this.#saveStorage();
   }
+
+  updateTodoItemByList(name, todoItemIndex, todoItem) {
+    const todoList = this.getTodoListByList(name);
+    todoList[todoItemIndex] = todoItem;
+    this.listMap.set(name, todoList);
+    this.#saveStorage();
+  }
 }

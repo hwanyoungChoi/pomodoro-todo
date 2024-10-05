@@ -53,6 +53,18 @@ export default class TodoSection {
     );
   }
 
+  #handleTodoItemComplete(index, todoItem) {
+    const updatedTodoItem = {
+      ...todoItem,
+      isCompleted: !todoItem.isCompleted,
+    };
+    this.store.updateTodoItemByList(
+      this.store.getSelectedListItem(),
+      index,
+      updatedTodoItem
+    );
+  }
+
   // 요소 생성 메소드..
   #createTitleContainer() {
     const $titleContainer = document.createElement("div");
@@ -86,9 +98,10 @@ export default class TodoSection {
   #createTodoList() {
     const $todoList = document.createElement("ul");
 
-    this.#getTodoList().forEach((todoItem) => {
+    this.#getTodoList().forEach((todoItem, index) => {
       const $todoItem = new TodoItem({
         ...todoItem,
+        onComplete: this.#handleTodoItemComplete.bind(this, index, todoItem),
       });
       $todoList.appendChild($todoItem.render());
     });
