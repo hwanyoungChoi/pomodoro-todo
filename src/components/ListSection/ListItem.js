@@ -77,6 +77,7 @@ export default class ListItem {
 
   #createTodoCount() {
     const $todoCount = document.createElement("div");
+    $todoCount.classList.add("todo-count");
     $todoCount.innerText = this.todoCount;
     return $todoCount;
   }
