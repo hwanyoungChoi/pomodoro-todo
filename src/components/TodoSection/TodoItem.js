@@ -53,7 +53,7 @@ export default class TodoItem {
     const $rightContainer = document.createElement("div");
 
     const $deleteButton = document.createElement("button");
-    $deleteButton.setAttribute("type", "button");
+    $deleteButton.type = "button";
     $deleteButton.innerText = "X";
     $deleteButton.addEventListener("click", (event) => {
       event.stopPropagation();

@@ -63,7 +63,7 @@ export default class ListItem {
 
   #createDeleteButton() {
     const $deleteButton = document.createElement("button");
-    $deleteButton.setAttribute("type", "button");
+    $deleteButton.type = "button";
     $deleteButton.innerText = "X";
     $deleteButton.addEventListener("click", (event) => {
       event.stopPropagation();
@@ -75,13 +75,6 @@ export default class ListItem {
     return $deleteButton;
   }
 
-  #createTodoCount() {
-    const $todoCount = document.createElement("div");
-    $todoCount.classList.add("todo-count");
-    $todoCount.innerText = this.todoCount;
-    return $todoCount;
-  }
-
   #createRightContainer() {
     const $rightContainer = document.createElement("div");
     $rightContainer.classList.add("right");
@@ -90,7 +83,10 @@ export default class ListItem {
       $rightContainer.appendChild(this.#createDeleteButton());
     }
 
-    $rightContainer.appendChild(this.#createTodoCount());
+    const $todoCount = document.createElement("div");
+    $todoCount.classList.add("todo-count");
+    $todoCount.innerText = this.todoCount;
+    $rightContainer.appendChild($todoCount);
 
     return $rightContainer;
   }

@@ -55,7 +55,7 @@ export default class ListSection {
     $titleCotainer.appendChild($title);
 
     const $addButton = document.createElement("button");
-    $addButton.setAttribute("type", "button");
+    $addButton.type = "button";
     $addButton.innerText = "+";
     $addButton.addEventListener("click", () => {
       this.#handleAddButtonClick();
