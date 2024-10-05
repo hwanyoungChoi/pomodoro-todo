@@ -1,25 +1,25 @@
 export default class TodoItem {
-  constructor({ name, pomodoroTime, pomodoroCount, isCompleted, onComplete }) {
+  constructor({
+    name,
+    pomodoroTime,
+    pomodoroCount,
+    isCompleted,
+    onComplete,
+    onDelete,
+  }) {
     this.name = name;
     this.pomodoroTime = pomodoroTime;
     this.pomodoroCount = pomodoroCount;
     this.isCompleted = isCompleted;
     this.onComplete = onComplete;
+    this.onDelete = onDelete;
 
     this.$todoItem = null;
   }
 
-  render() {
-    if (!this.$todoItem) {
-      this.$todoItem = document.createElement("li");
-      this.$todoItem.classList.add("todo-item");
-    }
-
-    this.$todoItem.innerHTML = "";
-
+  #createNameContainer() {
     const $nameContainer = document.createElement("div");
     $nameContainer.classList.add("name-container");
-    this.$todoItem.appendChild($nameContainer);
 
     if (this.isCompleted) {
       $nameContainer.classList.add("completed");
@@ -45,6 +45,37 @@ export default class TodoItem {
         <em>${this.pomodoroCount}</em>
     `;
     $nameContainer.appendChild($name);
+
+    return $nameContainer;
+  }
+
+  #createRightContainer() {
+    const $rightContainer = document.createElement("div");
+
+    const $deleteButton = document.createElement("button");
+    $deleteButton.setAttribute("type", "button");
+    $deleteButton.innerText = "X";
+    $deleteButton.addEventListener("click", (event) => {
+      event.stopPropagation();
+      if (this.onDelete) {
+        this.onDelete(this.name);
+      }
+    });
+    $rightContainer.appendChild($deleteButton);
+
+    return $rightContainer;
+  }
+
+  render() {
+    if (!this.$todoItem) {
+      this.$todoItem = document.createElement("li");
+      this.$todoItem.classList.add("todo-item");
+    }
+
+    this.$todoItem.innerHTML = "";
+
+    this.$todoItem.appendChild(this.#createNameContainer());
+    this.$todoItem.appendChild(this.#createRightContainer());
 
     return this.$todoItem;
   }

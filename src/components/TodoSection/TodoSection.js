@@ -65,6 +65,12 @@ export default class TodoSection {
     );
   }
 
+  #handleTodoItemDelete(index) {
+    if (confirm("정말 삭제하시겠어요?")) {
+      this.store.deleteTodoItemByList(this.store.getSelectedListItem(), index);
+    }
+  }
+
   // 요소 생성 메소드..
   #createTitleContainer() {
     const $titleContainer = document.createElement("div");
@@ -102,6 +108,7 @@ export default class TodoSection {
       const $todoItem = new TodoItem({
         ...todoItem,
         onComplete: this.#handleTodoItemComplete.bind(this, index, todoItem),
+        onDelete: this.#handleTodoItemDelete.bind(this, index),
       });
       $todoList.appendChild($todoItem.render());
     });
