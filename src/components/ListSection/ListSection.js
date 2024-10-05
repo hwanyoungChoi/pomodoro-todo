@@ -28,6 +28,11 @@ export default class ListSection {
       onClick: null,
       onDelete: null,
       onInput: (name) => {
+        if (this.store.getListMap().has(name)) {
+          alert("동일한 이름으로 만들 수 없습니다.");
+          return;
+        }
+
         this.store.addListItem(name);
       },
     }).render();
