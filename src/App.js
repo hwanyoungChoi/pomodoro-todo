@@ -10,7 +10,7 @@ export default class App {
     this.$app = null;
     this.$header = new Header();
     this.$listSection = new ListSection(this.store);
-    this.$todoSection = new TodoSection();
+    this.$todoSection = new TodoSection(this.store);
   }
 
   render() {

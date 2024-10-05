@@ -39,6 +39,8 @@ main {
   align-items: center;
   gap: 10px;
   margin-bottom: 10px;
+  font-size: 20px;
+  font-weight: 700;
 }
 
 #list-section ul {
@@ -71,4 +73,26 @@ main {
   background-color: white;
   padding: 8px 16px;
   box-sizing: border-box;
+}
+
+#todo-section .title-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+#todo-section .title-container .left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+#todo-section ul {
+  margin-bottom: 10px;
+  max-height: 80%;
+  overflow: auto;
 }
