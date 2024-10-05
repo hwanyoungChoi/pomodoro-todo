@@ -121,12 +121,18 @@ main {
   opacity: 0.6;
 }
 
-.todo-item .name-container label span {
+.todo-item .name-container .name span {
   opacity: 0.4;
 }
 
-.todo-item .name-container label em {
+.todo-item .name-container .name em {
   color: red;
+}
+
+.todo-item .right-container {
+  display: flex;
+  align-items: center;
+  gap: 5px;
 }
 
 #todo-item-form {

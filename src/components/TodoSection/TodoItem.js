@@ -37,8 +37,8 @@ export default class TodoItem {
       }
     });
 
-    const $name = document.createElement("label");
-    $name.setAttribute("for", `isCompleted-${this.name}`);
+    const $name = document.createElement("span");
+    $name.classList.add("name");
     $name.innerHTML = `
         ${this.name}
         <span>(${this.pomodoroTime}m)</span>
@@ -51,6 +51,14 @@ export default class TodoItem {
 
   #createRightContainer() {
     const $rightContainer = document.createElement("div");
+    $rightContainer.classList.add("right-container");
+
+    if (!this.isCompleted) {
+      const $playButton = document.createElement("button");
+      $playButton.type = "button";
+      $playButton.innerText = "▶️";
+      $rightContainer.appendChild($playButton);
+    }
 
     const $deleteButton = document.createElement("button");
     $deleteButton.type = "button";
