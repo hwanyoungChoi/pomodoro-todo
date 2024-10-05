@@ -45,6 +45,7 @@ main {
   margin-bottom: 10px;
   font-size: 20px;
   font-weight: 700;
+  color: DodgerBlue;
 }
 
 #list-section ul {
@@ -93,6 +94,7 @@ main {
   margin-bottom: 10px;
   font-size: 20px;
   font-weight: 700;
+  color: DodgerBlue;
 }
 
 #todo-section .title-container .left {
@@ -114,4 +116,29 @@ main {
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+
+#todo-item-form {
+  width: 100%;
+  background-color: lightgray;
+  color: gray;
+  padding: 4px 6px;
+}
+
+#todo-item-form #name {
+  width: 80%;
+  margin-bottom: 5px;
+}
+
+#todo-section .pomodoro-time-container {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 5px;
+}
+
+#todo-section .button-container {
+  display: flex;
+  justify-content: end;
+  gap: 5px;
 }

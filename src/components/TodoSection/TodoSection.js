@@ -1,4 +1,5 @@
 import TodoItem from "./TodoItem";
+import TodoItemForm from "./TodoItemForm";
 
 export default class TodoSection {
   /**
@@ -20,6 +21,38 @@ export default class TodoSection {
       .length;
   }
 
+  #handleFormSubmitButtonClick(event) {
+    event.preventDefault();
+
+    const formData = new FormData(event.target);
+
+    const name = formData.get("name");
+    const pomodoroTime = formData.get("pomodoroTime");
+
+    this.store.addTodoItemByList(this.store.getSelectedListItem(), {
+      name,
+      pomodoroTime,
+      pomodoroCount: 0,
+      isCompleted: false,
+    });
+  }
+
+  #handleFormCancelButtonClick() {
+    const form = this.$todoSection.querySelector("form");
+    if (form) {
+      form.remove();
+    }
+  }
+
+  #handleAddButtonClick() {
+    this.$todoSection.appendChild(
+      new TodoItemForm({
+        onSubmit: this.#handleFormSubmitButtonClick.bind(this),
+        onCancel: this.#handleFormCancelButtonClick.bind(this),
+      }).render()
+    );
+  }
+
   // 요소 생성 메소드..
   #createTitleContainer() {
     const $titleContainer = document.createElement("div");
@@ -36,7 +69,9 @@ export default class TodoSection {
     const $addButton = document.createElement("button");
     $addButton.setAttribute("type", "button");
     $addButton.innerText = "+";
-    $addButton.addEventListener("click", () => {});
+    $addButton.addEventListener("click", () => {
+      this.#handleAddButtonClick();
+    });
     $left.appendChild($addButton);
 
     const $count = document.createElement("div");
@@ -46,6 +81,19 @@ export default class TodoSection {
     $titleContainer.appendChild($count);
 
     return $titleContainer;
+  }
+
+  #createTodoList() {
+    const $todoList = document.createElement("ul");
+
+    this.#getTodoList().forEach((todoItem) => {
+      const $todoItem = new TodoItem({
+        ...todoItem,
+      });
+      $todoList.appendChild($todoItem.render());
+    });
+
+    return $todoList;
   }
 
   render() {
@@ -58,17 +106,7 @@ export default class TodoSection {
 
     if (this.store.getSelectedListItem()) {
       this.$todoSection.appendChild(this.#createTitleContainer());
-
-      const $todoList = document.createElement("ul");
-
-      this.#getTodoList().forEach((todoItem) => {
-        const $todoItem = new TodoItem({
-          ...todoItem,
-        });
-        $todoList.appendChild($todoItem.render());
-      });
-
-      this.$todoSection.appendChild($todoList);
+      this.$todoSection.appendChild(this.#createTodoList());
     } else {
       this.$todoSection.innerText = "선택 된 목록이 없습니다.";
     }
