@@ -64,17 +64,15 @@ export default class Store {
   }
 
   addTodoItemByList(name, todoItem) {
-    const todoList = this.getTodoListByList(name);
-    todoList.push(todoItem);
-
+    const todoList = [...this.getTodoListByList(name), todoItem];
     this.listMap.set(name, todoList);
     this.#saveStorage();
   }
 
   deleteTodoItemByList(name, todoItemIndex) {
-    const todoList = this.getTodoListByList(name);
-    todoList.splice(todoItemIndex, 1);
-
+    const todoList = this.getTodoListByList(name).filter(
+      (_, index) => index !== todoItemIndex
+    );
     this.listMap.set(name, todoList);
     this.#saveStorage();
   }
