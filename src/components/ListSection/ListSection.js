@@ -45,38 +45,28 @@ export default class ListSection {
     }
   }
 
-  render() {
-    if (!this.$listSection) {
-      // 섹션 영역
-      this.$listSection = document.createElement("section");
-      this.$listSection.id = "list-section";
+  // 요소 생성 메소드..
+  #createTitleContainer() {
+    const $titleCotainer = document.createElement("div");
+    $titleCotainer.classList.add("title-container");
 
-      // 섹션 내 타이틀 영역
-      const $titleCotainer = document.createElement("div");
-      $titleCotainer.classList.add("title-container");
+    const $title = document.createElement("h2");
+    $title.innerText = "목록";
+    $titleCotainer.appendChild($title);
 
-      const $title = document.createElement("h2");
-      $title.innerText = "목록";
-      $titleCotainer.appendChild($title);
+    const $addButton = document.createElement("button");
+    $addButton.setAttribute("type", "button");
+    $addButton.innerText = "+";
+    $addButton.addEventListener("click", () => {
+      this.#handleAddButtonClick();
+    });
+    $titleCotainer.appendChild($addButton);
 
-      const $addButton = document.createElement("button");
-      $addButton.setAttribute("type", "button");
-      $addButton.innerText = "+";
-      $addButton.addEventListener("click", () => {
-        this.#handleAddButtonClick();
-      });
-      $titleCotainer.appendChild($addButton);
+    return $titleCotainer;
+  }
 
-      this.$listSection.appendChild($titleCotainer);
-    }
-
-    // 섹션 내 목록 영역
-    const $list = this.$listSection.querySelector("ul");
-    if ($list) {
-      this.$listSection.querySelector("ul").remove();
-    }
-
-    const $newList = document.createElement("ul");
+  #createList() {
+    const $list = document.createElement("ul");
 
     for (const [key, value] of this.store.getListMap()) {
       const $listItem = new ListItem({
@@ -86,10 +76,26 @@ export default class ListSection {
         onClick: this.#handleItemClick.bind(this),
         onDelete: this.#handleItemDeleteButtonClick.bind(this),
       });
-      $newList.appendChild($listItem.render());
+      $list.appendChild($listItem.render());
     }
 
-    this.$listSection.appendChild($newList);
+    return $list;
+  }
+
+  render() {
+    if (!this.$listSection) {
+      this.$listSection = document.createElement("section");
+      this.$listSection.id = "list-section";
+
+      this.$listSection.appendChild(this.#createTitleContainer());
+    }
+
+    const $existingList = this.$listSection.querySelector("ul");
+    if ($existingList) {
+      $existingList.remove();
+    }
+
+    this.$listSection.appendChild(this.#createList());
 
     return this.$listSection;
   }
