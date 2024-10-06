@@ -53,8 +53,8 @@ export default class TodoSection {
 
     this.$todoSection.appendChild(
       new TodoItemForm({
-        onSubmit: this.#handleFormSubmitButtonClick.bind(this),
-        onCancel: this.#handleFormCancelButtonClick.bind(this),
+        onSubmit: (event) => this.#handleFormSubmitButtonClick(event),
+        onCancel: () => this.#handleFormCancelButtonClick(),
       }).render()
     );
   }
@@ -118,10 +118,11 @@ export default class TodoSection {
       const $todoItem = new TodoItem({
         ...todoItem,
         isPlayed: this.store.getPlayedTodoInfo()?.todoItemIndex === index,
-        onUpdate: this.#handleTodoItemComplete.bind(this, index),
-        onDelete: this.#handleTodoItemDelete.bind(this, index),
-        onPlay: this.#handleTodoItemPlay.bind(this, index),
-        onStop: this.#handleTodoItemStop.bind(this),
+        onUpdate: (updatedTodoItem) =>
+          this.#handleTodoItemComplete(index, updatedTodoItem),
+        onDelete: () => this.#handleTodoItemDelete(index),
+        onPlay: () => this.#handleTodoItemPlay(index),
+        onStop: () => this.#handleTodoItemStop(),
       });
       $todoList.appendChild($todoItem.render());
     });

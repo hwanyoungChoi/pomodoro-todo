@@ -79,8 +79,8 @@ export default class ListSection {
         name: key,
         todoCount: value.length,
         isSelected: this.store.getSelectedListItem() === key,
-        onClick: this.#handleItemClick.bind(this),
-        onDelete: this.#handleItemDeleteButtonClick.bind(this),
+        onClick: (name) => this.#handleItemClick(name),
+        onDelete: (name) => this.#handleItemDeleteButtonClick(name),
       });
       $list.appendChild($listItem.render());
     }
