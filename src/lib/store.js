@@ -140,6 +140,16 @@ export default class Store {
     const todoList = this.getTodoListByList(name);
     todoList[todoItemIndex] = todoItem;
     this.listMap.set(name, todoList);
+
+    // 수정하기 전에 포모도로 실행 중인 할일이면서 완료처리되는 경우 실행 제거
+    if (
+      this.playedTodoInfo?.listName === name &&
+      this.playedTodoInfo?.todoItemIndex === todoItemIndex &&
+      todoItem.isCompleted
+    ) {
+      this.playedTodoInfo = null;
+    }
+
     this.#saveStorage();
   }
 
