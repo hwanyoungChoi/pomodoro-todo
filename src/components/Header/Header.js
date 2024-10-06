@@ -1,3 +1,5 @@
+import Button from "../Button";
+
 export default class Header {
   /**
    * @constructor
@@ -36,18 +38,21 @@ export default class Header {
       const $rightContainer = document.createElement("div");
       $title.appendChild($rightContainer);
 
-      const $stopButton = document.createElement("button");
-      $stopButton.type = "button";
-      $stopButton.innerText = "⏹️";
-      $stopButton.addEventListener("click", () => {
-        this.store.deletePlayedTodoInfo();
-      });
-      $rightContainer.appendChild($stopButton);
+      $rightContainer.appendChild(
+        new Button({
+          text: "⏹️",
+          type: "button",
+          onClick: () => this.store.deletePlayedTodoInfo(),
+        }).render()
+      );
 
-      const $pauseButton = document.createElement("button");
-      $pauseButton.type = "button";
-      $pauseButton.innerText = "⏸️";
-      $rightContainer.appendChild($pauseButton);
+      $rightContainer.appendChild(
+        new Button({
+          text: "⏸️",
+          type: "button",
+          onClick: () => {},
+        }).render()
+      );
 
       this.$header.appendChild($title);
     }

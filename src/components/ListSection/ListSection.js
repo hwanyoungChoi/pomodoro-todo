@@ -1,3 +1,4 @@
+import Button from "../Button";
 import ListItem from "./ListItem";
 
 export default class ListSection {
@@ -59,13 +60,13 @@ export default class ListSection {
     $title.innerText = "목록";
     $titleCotainer.appendChild($title);
 
-    const $addButton = document.createElement("button");
-    $addButton.type = "button";
-    $addButton.innerText = "+";
-    $addButton.addEventListener("click", () => {
-      this.#handleAddButtonClick();
-    });
-    $titleCotainer.appendChild($addButton);
+    $titleCotainer.appendChild(
+      new Button({
+        text: "+",
+        type: "button",
+        onClick: () => this.#handleAddButtonClick(),
+      }).render()
+    );
 
     return $titleCotainer;
   }

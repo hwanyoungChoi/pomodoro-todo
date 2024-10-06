@@ -1,3 +1,4 @@
+import Button from "../Button";
 import TodoItem from "./TodoItem";
 import TodoItemForm from "./TodoItemForm";
 
@@ -93,13 +94,13 @@ export default class TodoSection {
     $title.innerText = this.store.getSelectedListItem();
     $left.appendChild($title);
 
-    const $addButton = document.createElement("button");
-    $addButton.type = "button";
-    $addButton.innerText = "+";
-    $addButton.addEventListener("click", () => {
-      this.#handleAddButtonClick();
-    });
-    $left.appendChild($addButton);
+    $left.appendChild(
+      new Button({
+        text: "+",
+        type: "button",
+        onClick: () => this.#handleAddButtonClick(),
+      }).render()
+    );
 
     const $count = document.createElement("div");
     $count.innerText = `${this.#getCompletedTodoCount()} / ${

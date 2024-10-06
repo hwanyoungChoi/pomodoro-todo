@@ -1,3 +1,5 @@
+import Button from "../Button";
+
 const INITIAL_NAME = "새로운 할일 입력";
 
 export default class TodoItemForm {
@@ -61,25 +63,28 @@ export default class TodoItemForm {
     const $buttonContainer = document.createElement("div");
     $buttonContainer.classList.add("button-container");
 
-    const $submitButton = document.createElement("button");
-    $submitButton.type = "submit";
-    $submitButton.textContent = "저장";
-    $buttonContainer.appendChild($submitButton);
+    $buttonContainer.appendChild(
+      new Button({
+        text: "저장",
+        type: "submit",
+      }).render()
+    );
 
-    const $cancelButton = document.createElement("button");
-    $cancelButton.type = "button";
-    $cancelButton.textContent = "취소";
-    $buttonContainer.appendChild($cancelButton);
+    $buttonContainer.appendChild(
+      new Button({
+        text: "취소",
+        type: "button",
+        onClick: () => {
+          if (this.onCancel) {
+            this.onCancel();
+          }
+        },
+      }).render()
+    );
 
     this.$form.addEventListener("submit", (event) => {
       if (this.onSubmit) {
         this.onSubmit(event);
-      }
-    });
-
-    $cancelButton.addEventListener("click", () => {
-      if (this.onCancel) {
-        this.onCancel();
       }
     });
 

@@ -1,3 +1,4 @@
+import Button from "../Button";
 import TodoItemForm from "./TodoItemForm";
 
 export default class TodoItem {
@@ -87,29 +88,33 @@ export default class TodoItem {
     $rightContainer.classList.add("right-container");
 
     if (!this.isCompleted) {
-      const $playButton = document.createElement("button");
-      $playButton.type = "button";
-      $playButton.innerText = this.isPlayed ? "⏹️" : "▶️";
-      $playButton.addEventListener("click", () => {
-        if (this.onPlay && !this.isPlayed) {
-          this.onPlay();
-        }
-        if (this.onPlay && this.isPlayed) {
-          this.onStop();
-        }
-      });
-      $rightContainer.appendChild($playButton);
+      $rightContainer.appendChild(
+        new Button({
+          text: this.isPlayed ? "⏹️" : "▶️",
+          type: "button",
+          onClick: () => {
+            if (this.onPlay && !this.isPlayed) {
+              this.onPlay();
+            }
+            if (this.onStop && this.isPlayed) {
+              this.onStop();
+            }
+          },
+        }).render()
+      );
     }
 
-    const $deleteButton = document.createElement("button");
-    $deleteButton.type = "button";
-    $deleteButton.innerText = "X";
-    $deleteButton.addEventListener("click", () => {
-      if (this.onDelete) {
-        this.onDelete();
-      }
-    });
-    $rightContainer.appendChild($deleteButton);
+    $rightContainer.appendChild(
+      new Button({
+        text: "X",
+        type: "button",
+        onClick: () => {
+          if (this.onDelete) {
+            this.onDelete();
+          }
+        },
+      }).render()
+    );
 
     return $rightContainer;
   }

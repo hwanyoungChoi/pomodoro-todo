@@ -1,3 +1,5 @@
+import Button from "../Button";
+
 export default class ListItem {
   /**
    * @constructor
@@ -62,17 +64,11 @@ export default class ListItem {
   }
 
   #createDeleteButton() {
-    const $deleteButton = document.createElement("button");
-    $deleteButton.type = "button";
-    $deleteButton.innerText = "X";
-    $deleteButton.addEventListener("click", (event) => {
-      event.stopPropagation();
-      if (this.onDelete) {
-        this.onDelete(this.name);
-      }
-    });
-
-    return $deleteButton;
+    return new Button({
+      text: "X",
+      type: "button",
+      onClick: () => this.onDelete(this.name),
+    }).render();
   }
 
   #createRightContainer() {
