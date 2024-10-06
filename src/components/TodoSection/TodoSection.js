@@ -47,7 +47,7 @@ export default class TodoSection {
   #handleAddButtonClick() {
     const formExists = this.$todoSection.querySelector("#todo-item-form");
     if (formExists) {
-      formExists.remove();
+      return;
     }
 
     this.$todoSection.appendChild(
