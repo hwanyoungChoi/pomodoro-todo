@@ -118,6 +118,15 @@ export default class Store {
       (_, index) => index !== todoItemIndex
     );
     this.listMap.set(name, todoList);
+
+    // 제거하기 전에 포모도로 실행 중인 할일인 경우 실행 제거
+    if (
+      this.playedTodoInfo?.listName === name &&
+      this.playedTodoInfo?.todoItemIndex === todoItemIndex
+    ) {
+      this.playedTodoInfo = null;
+    }
+
     this.#saveStorage();
   }
 
