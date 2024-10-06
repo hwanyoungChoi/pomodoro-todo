@@ -59,14 +59,10 @@ export default class TodoSection {
   }
 
   #handleTodoItemComplete(index, todoItem) {
-    const updatedTodoItem = {
-      ...todoItem,
-      isCompleted: !todoItem.isCompleted,
-    };
     this.store.updateTodoItemByList(
       this.store.getSelectedListItem(),
       index,
-      updatedTodoItem
+      todoItem
     );
   }
 
@@ -112,7 +108,7 @@ export default class TodoSection {
     this.#getTodoList().forEach((todoItem, index) => {
       const $todoItem = new TodoItem({
         ...todoItem,
-        onComplete: this.#handleTodoItemComplete.bind(this, index, todoItem),
+        onUpdate: this.#handleTodoItemComplete.bind(this, index),
         onDelete: this.#handleTodoItemDelete.bind(this, index),
       });
       $todoList.appendChild($todoItem.render());

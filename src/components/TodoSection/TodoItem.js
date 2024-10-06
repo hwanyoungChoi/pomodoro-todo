@@ -8,7 +8,7 @@ export default class TodoItem {
    * @param {number} options.pomodoroTime - 할일 아이템의 포모도로 시간 (초 단위)
    * @param {boolean} options.pomodoroCount - 할일 아이템의 포도도로 완료 수
    * @param {boolean} options.isCompleted - 할일 아이템의 완료 여부
-   * @param {Function} options.onComplete - 할일 아이템의 완료 이벤트
+   * @param {Function} options.onUpdate - 할일 아이템 업데이트 이벤트
    * @param {Function} options.onDelete - 할일 아이템의 삭제 이벤트
    */
   constructor({
@@ -16,14 +16,14 @@ export default class TodoItem {
     pomodoroTime,
     pomodoroCount,
     isCompleted,
-    onComplete,
+    onUpdate,
     onDelete,
   }) {
     this.name = name;
     this.pomodoroTime = pomodoroTime;
     this.pomodoroCount = pomodoroCount;
     this.isCompleted = isCompleted;
-    this.onComplete = onComplete;
+    this.onUpdate = onUpdate;
     this.onDelete = onDelete;
 
     this.isEdit = false;
@@ -46,8 +46,13 @@ export default class TodoItem {
     $nameContainer.appendChild($checkbox);
 
     $checkbox.addEventListener("change", () => {
-      if (this.onComplete) {
-        this.onComplete();
+      if (this.onUpdate) {
+        this.onUpdate({
+          name: this.name,
+          pomodoroTime: this.pomodoroTime,
+          pomodoroCount: this.pomodoroCount,
+          isCompleted: !this.isCompleted,
+        });
       }
     });
 
