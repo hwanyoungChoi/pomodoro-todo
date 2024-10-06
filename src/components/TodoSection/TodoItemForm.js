@@ -1,9 +1,12 @@
+const INITIAL_NAME = "새로운 할일 입력";
+
 export default class TodoItemForm {
-  constructor({ onSubmit, onCancel }) {
+  constructor({ name, pomodoroTime, onSubmit, onCancel }) {
+    this.name = name;
+    this.pomodoroTime = pomodoroTime;
     this.onSubmit = onSubmit;
     this.onCancel = onCancel;
 
-    this.initialName = "새로운 할일 입력";
     this.isFirstFocus = true;
 
     this.$form = null;
@@ -16,11 +19,11 @@ export default class TodoItemForm {
     $nameInput.name = "name";
     $nameInput.required = true;
 
-    $nameInput.value = this.initialName;
+    $nameInput.value = this.name ?? INITIAL_NAME;
 
     $nameInput.addEventListener("focus", () => {
       if (this.isFirstFocus) {
-        if ($nameInput.value === this.initialName) {
+        if ($nameInput.value === INITIAL_NAME) {
           $nameInput.value = "";
         }
       }
@@ -47,6 +50,8 @@ export default class TodoItemForm {
     $pomodoroInput.min = 1;
     $pomodoroInput.max = 60;
     $pomodoroInput.required = true;
+
+    $pomodoroInput.value = this.pomodoroTime;
     $pomodoroTimeContainer.appendChild($pomodoroInput);
 
     return $pomodoroTimeContainer;

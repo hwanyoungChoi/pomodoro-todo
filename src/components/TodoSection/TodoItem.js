@@ -1,3 +1,5 @@
+import TodoItemForm from "./TodoItemForm";
+
 export default class TodoItem {
   /**
    * @constructor
@@ -23,6 +25,8 @@ export default class TodoItem {
     this.isCompleted = isCompleted;
     this.onComplete = onComplete;
     this.onDelete = onDelete;
+
+    this.isEdit = false;
 
     this.$todoItem = null;
   }
@@ -56,6 +60,11 @@ export default class TodoItem {
     `;
     $nameContainer.appendChild($name);
 
+    $name.addEventListener("click", () => {
+      this.isEdit = true;
+      this.render();
+    });
+
     return $nameContainer;
   }
 
@@ -84,6 +93,28 @@ export default class TodoItem {
     return $rightContainer;
   }
 
+  #createEditForm() {
+    return new TodoItemForm({
+      name: this.name,
+      pomodoroTime: this.pomodoroTime,
+      onSubmit: (event) => {
+        event.preventDefault();
+        this.isEdit = false;
+
+        const formData = new FormData(event.target);
+
+        const name = formData.get("name");
+        const pomodoroTime = formData.get("pomodoroTime");
+
+        this.render();
+      },
+      onCancel: () => {
+        this.isEdit = false;
+        this.render();
+      },
+    }).render();
+  }
+
   render() {
     if (!this.$todoItem) {
       this.$todoItem = document.createElement("li");
@@ -92,8 +123,12 @@ export default class TodoItem {
 
     this.$todoItem.innerHTML = "";
 
-    this.$todoItem.appendChild(this.#createNameContainer());
-    this.$todoItem.appendChild(this.#createRightContainer());
+    if (!this.isEdit) {
+      this.$todoItem.appendChild(this.#createNameContainer());
+      this.$todoItem.appendChild(this.#createRightContainer());
+    } else {
+      this.$todoItem.appendChild(this.#createEditForm());
+    }
 
     return this.$todoItem;
   }
