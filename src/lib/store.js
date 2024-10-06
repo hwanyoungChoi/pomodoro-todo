@@ -3,19 +3,26 @@ export default class Store {
     this.storageKey = storageKey;
     this.rerenderCallback = rerenderCallback;
 
-    const { listMap, selectedListItem } = this.#loadStorage() ?? {
-      listMap: new Map(),
-      selectedListItem: null,
-    };
+    const { listMap, selectedListItem, playedTodoItem, playedTodoInfo } =
+      this.#loadStorage() ?? {
+        listMap: new Map(),
+        selectedListItem: null,
+        playedTodoInfo: null,
+      };
     this.listMap = listMap;
     this.selectedListItem = selectedListItem;
+    this.playedTodoInfo = playedTodoInfo;
   }
 
   #loadStorage() {
     const data = JSON.parse(localStorage.getItem(this.storageKey));
     if (data) {
       const listMap = new Map(data.listMap);
-      return { listMap, selectedListItem: data.selectedListItem };
+      return {
+        listMap,
+        selectedListItem: data.selectedListItem,
+        playedTodoInfo: data.playedTodoInfo,
+      };
     }
     return null;
   }
@@ -24,6 +31,7 @@ export default class Store {
     const dataToSave = {
       listMap: Array.from(this.listMap),
       selectedListItem: this.selectedListItem,
+      playedTodoInfo: this.playedTodoInfo,
     };
     localStorage.setItem(this.storageKey, JSON.stringify(dataToSave));
 
@@ -83,6 +91,23 @@ export default class Store {
     const todoList = this.getTodoListByList(name);
     todoList[todoItemIndex] = todoItem;
     this.listMap.set(name, todoList);
+    this.#saveStorage();
+  }
+
+  getPlayedTodoInfo() {
+    return this.playedTodoInfo;
+  }
+
+  setPlayedTodoInfo(name, todoItemIndex) {
+    this.playedTodoInfo = {
+      listName: name,
+      todoItemIndex,
+    };
+    this.#saveStorage();
+  }
+
+  deletePlayedTodoInfo() {
+    this.playedTodoInfo = null;
     this.#saveStorage();
   }
 }
