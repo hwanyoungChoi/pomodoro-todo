@@ -32,6 +32,23 @@ export default class Header {
           }
         </div>
       `;
+
+      const $rightContainer = document.createElement("div");
+      $title.appendChild($rightContainer);
+
+      const $stopButton = document.createElement("button");
+      $stopButton.type = "button";
+      $stopButton.innerText = "⏹️";
+      $stopButton.addEventListener("click", () => {
+        this.store.deletePlayedTodoInfo();
+      });
+      $rightContainer.appendChild($stopButton);
+
+      const $pauseButton = document.createElement("button");
+      $pauseButton.type = "button";
+      $pauseButton.innerText = "⏸️";
+      $rightContainer.appendChild($pauseButton);
+
       this.$header.appendChild($title);
     }
 
