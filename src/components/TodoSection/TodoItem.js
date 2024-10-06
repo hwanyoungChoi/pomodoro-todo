@@ -123,6 +123,7 @@ export default class TodoItem {
     return new TodoItemForm({
       name: this.name,
       pomodoroTime: this.pomodoroTime,
+      isEdit: this.isEdit,
       onSubmit: (event) => {
         event.preventDefault();
         this.isEdit = false;

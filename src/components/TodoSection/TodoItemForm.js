@@ -3,9 +3,10 @@ import Button from "../Button";
 const INITIAL_NAME = "새로운 할일 입력";
 
 export default class TodoItemForm {
-  constructor({ name, pomodoroTime, onSubmit, onCancel }) {
+  constructor({ name, pomodoroTime, isEdit, onSubmit, onCancel }) {
     this.name = name;
     this.pomodoroTime = pomodoroTime;
+    this.isEdit = isEdit;
     this.onSubmit = onSubmit;
     this.onCancel = onCancel;
 
@@ -24,7 +25,7 @@ export default class TodoItemForm {
     $nameInput.value = this.name ?? INITIAL_NAME;
 
     $nameInput.addEventListener("focus", () => {
-      if (this.isFirstFocus) {
+      if (this.isFirstFocus && !this.isEdit) {
         if ($nameInput.value === INITIAL_NAME) {
           $nameInput.value = "";
         }
