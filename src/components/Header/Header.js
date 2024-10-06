@@ -26,7 +26,7 @@ export default class Header {
       const $title = document.createElement("h1");
       $title.innerHTML = `
         <div>
-          <em>${this.store.getSelectedListItem()} / </em>
+          <em>${this.store.getPlayedTodoInfo().listName} / </em>
           ${
             this.store.getTodoListByList(
               this.store.getPlayedTodoInfo().listName
