@@ -111,6 +111,13 @@ export default class TodoItem {
         const name = formData.get("name");
         const pomodoroTime = formData.get("pomodoroTime");
 
+        this.onUpdate({
+          name,
+          pomodoroTime,
+          pomodoroCount: this.pomodoroCount,
+          isCompleted: this.isCompleted,
+        });
+
         this.render();
       },
       onCancel: () => {
