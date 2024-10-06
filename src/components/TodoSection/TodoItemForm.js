@@ -3,6 +3,15 @@ import Button from "../Button";
 const INITIAL_NAME = "새로운 할일 입력";
 
 export default class TodoItemForm {
+  /**
+   * constructor
+   * @param {Object} option
+   * @param {string} option.name - 할일 이름
+   * @param {number} option.pomodoroTime - 할일 포모도로 시간
+   * @param {boolean} isEdit - 할일 폼 편집 전용 여부
+   * @param {Function} onSubmit - 할일 폼 저장 이벤트
+   * @param {Function} onCancel - 할일 폼 취소 이벤트
+   */
   constructor({ name, pomodoroTime, isEdit, onSubmit, onCancel }) {
     this.name = name;
     this.pomodoroTime = pomodoroTime;
