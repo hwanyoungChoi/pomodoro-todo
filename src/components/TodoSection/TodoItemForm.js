@@ -3,6 +3,9 @@ export default class TodoItemForm {
     this.onSubmit = onSubmit;
     this.onCancel = onCancel;
 
+    this.initialName = "새로운 할일 입력";
+    this.isFirstFocus = true;
+
     this.$form = null;
   }
 
@@ -12,6 +15,18 @@ export default class TodoItemForm {
     $nameInput.id = "name";
     $nameInput.name = "name";
     $nameInput.required = true;
+
+    $nameInput.value = this.initialName;
+
+    $nameInput.addEventListener("focus", () => {
+      if (this.isFirstFocus) {
+        if ($nameInput.value === this.initialName) {
+          $nameInput.value = "";
+        }
+      }
+
+      this.isFirstFocus = false;
+    });
 
     return $nameInput;
   }
