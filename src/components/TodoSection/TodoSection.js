@@ -72,6 +72,14 @@ export default class TodoSection {
     }
   }
 
+  #handleTodoItemPlay(index) {
+    this.store.setPlayedTodoInfo(this.store.getSelectedListItem(), index);
+  }
+
+  #handleTodoItemStop() {
+    this.store.deletePlayedTodoInfo();
+  }
+
   // 요소 생성 메소드..
   #createTitleContainer() {
     const $titleContainer = document.createElement("div");
@@ -108,8 +116,11 @@ export default class TodoSection {
     this.#getTodoList().forEach((todoItem, index) => {
       const $todoItem = new TodoItem({
         ...todoItem,
+        isPlayed: this.store.getPlayedTodoInfo()?.todoItemIndex === index,
         onUpdate: this.#handleTodoItemComplete.bind(this, index),
         onDelete: this.#handleTodoItemDelete.bind(this, index),
+        onPlay: this.#handleTodoItemPlay.bind(this, index),
+        onStop: this.#handleTodoItemStop.bind(this),
       });
       $todoList.appendChild($todoItem.render());
     });

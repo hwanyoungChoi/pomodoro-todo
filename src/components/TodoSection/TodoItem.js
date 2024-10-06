@@ -8,23 +8,32 @@ export default class TodoItem {
    * @param {number} options.pomodoroTime - 할일 아이템의 포모도로 시간 (초 단위)
    * @param {boolean} options.pomodoroCount - 할일 아이템의 포도도로 완료 수
    * @param {boolean} options.isCompleted - 할일 아이템의 완료 여부
-   * @param {Function} options.onUpdate - 할일 아이템 업데이트 이벤트
-   * @param {Function} options.onDelete - 할일 아이템의 삭제 이벤트
+   * @param {boolean} isPlayed - 할일 포모도로 시작 여부
+   * @param {Function} onUpdate - 할일 아이템 업데이트 이벤트
+   * @param {Function} onDelete - 할일 아이템의 삭제 이벤트
+   * @param {Function} onPlay - 할일 아이템 시작 이벤트
+   * @param {Function} onStop - 할일 아이템 중지 이벤트
    */
   constructor({
     name,
     pomodoroTime,
     pomodoroCount,
     isCompleted,
+    isPlayed,
     onUpdate,
     onDelete,
+    onPlay,
+    onStop,
   }) {
     this.name = name;
     this.pomodoroTime = pomodoroTime;
     this.pomodoroCount = pomodoroCount;
     this.isCompleted = isCompleted;
+    this.isPlayed = isPlayed;
     this.onUpdate = onUpdate;
     this.onDelete = onDelete;
+    this.onPlay = onPlay;
+    this.onStop = onStop;
 
     this.isEdit = false;
 
@@ -80,17 +89,24 @@ export default class TodoItem {
     if (!this.isCompleted) {
       const $playButton = document.createElement("button");
       $playButton.type = "button";
-      $playButton.innerText = "▶️";
+      $playButton.innerText = this.isPlayed ? "⏹️" : "▶️";
+      $playButton.addEventListener("click", () => {
+        if (this.onPlay && !this.isPlayed) {
+          this.onPlay();
+        }
+        if (this.onPlay && this.isPlayed) {
+          this.onStop();
+        }
+      });
       $rightContainer.appendChild($playButton);
     }
 
     const $deleteButton = document.createElement("button");
     $deleteButton.type = "button";
     $deleteButton.innerText = "X";
-    $deleteButton.addEventListener("click", (event) => {
-      event.stopPropagation();
+    $deleteButton.addEventListener("click", () => {
       if (this.onDelete) {
-        this.onDelete(this.name);
+        this.onDelete();
       }
     });
     $rightContainer.appendChild($deleteButton);

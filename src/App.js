@@ -8,7 +8,7 @@ export default class App {
     this.store = new Store("todoApp", this.render.bind(this));
 
     this.$app = null;
-    this.$header = new Header();
+    this.$header = new Header(this.store);
     this.$listSection = new ListSection(this.store);
     this.$todoSection = new TodoSection(this.store);
   }
