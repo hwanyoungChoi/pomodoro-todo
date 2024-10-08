@@ -16,6 +16,11 @@ export default class Store {
     this.remainingTime = remainingTime;
 
     this.intervalId = null;
+
+    // 브라우저 새로고침 등 페이지 재진입 시 상태 복원
+    if (this.remainingTime && this.playedTodoInfo) {
+      this.resumeCount();
+    }
   }
 
   #loadStorage() {
@@ -29,6 +34,7 @@ export default class Store {
         remainingTime: data.remainingTime,
       };
     }
+
     return null;
   }
 
@@ -247,5 +253,30 @@ export default class Store {
    */
   pauseCount() {
     clearInterval(this.intervalId);
+  }
+
+  /**
+   * 카운트 복원
+   */
+  resumeCount() {
+    this.intervalId = setInterval(() => {
+      this.remainingTime--;
+      this.updateCount();
+
+      if (this.remainingTime <= 0) {
+        clearInterval(this.intervalId);
+        this.updateTodoItemByList(
+          this.playedTodoInfo.listName,
+          this.playedTodoInfo.todoItemIndex,
+          {
+            ...this.getTodoListByList(this.playedTodoInfo.listName)[
+              this.playedTodoInfo.todoItemIndex
+            ],
+            pomodoroCount: pomodoroCount + 1,
+          }
+        );
+        this.stopCount();
+      }
+    }, 1000);
   }
 }
