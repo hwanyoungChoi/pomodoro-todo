@@ -3,19 +3,24 @@ export default class Store {
     this.storageKey = storageKey;
     this.rerenderCallback = rerenderCallback;
 
-    const { listMap, selectedListItem, playedTodoInfo, remainingTime } =
-      this.#loadStorage() ?? {
-        listMap: new Map(),
-        selectedListItem: null,
-        playedTodoInfo: null,
-        remainingTime: null,
-      };
+    const {
+      listMap,
+      selectedListItem,
+      playedTodoInfo,
+      remainingTime,
+      intervalId,
+    } = this.#loadStorage() ?? {
+      listMap: new Map(),
+      selectedListItem: null,
+      playedTodoInfo: null,
+      remainingTime: null,
+      intervalId: null,
+    };
     this.listMap = listMap;
     this.selectedListItem = selectedListItem;
     this.playedTodoInfo = playedTodoInfo;
     this.remainingTime = remainingTime;
-
-    this.intervalId = null;
+    this.intervalId = intervalId;
 
     // 브라우저 새로고침 등 페이지 재진입 시 상태 복원
     if (this.remainingTime && this.playedTodoInfo) {
@@ -32,6 +37,7 @@ export default class Store {
         selectedListItem: data.selectedListItem,
         playedTodoInfo: data.playedTodoInfo,
         remainingTime: data.remainingTime,
+        intervalId: data.intervalId,
       };
     }
 
@@ -44,6 +50,7 @@ export default class Store {
       selectedListItem: this.selectedListItem,
       playedTodoInfo: this.playedTodoInfo,
       remainingTime: this.remainingTime,
+      intervalId: this.intervalId,
     };
     localStorage.setItem(this.storageKey, JSON.stringify(dataToSave));
 
@@ -215,6 +222,33 @@ export default class Store {
   }
 
   /**
+   * 카운트 복원
+   */
+  resumeCount() {
+    const todoItem = this.getTodoListByList(this.selectedListItem)[
+      this.playedTodoInfo.todoItemIndex
+    ];
+
+    this.intervalId = setInterval(() => {
+      this.remainingTime--;
+      this.updateCount();
+
+      if (this.remainingTime <= 0) {
+        clearInterval(this.intervalId);
+        this.updateTodoItemByList(
+          this.playedTodoInfo.listName,
+          this.playedTodoInfo.todoItemIndex,
+          {
+            ...todoItem,
+            pomodoroCount: todoItem.pomodoroCount + 1,
+          }
+        );
+        this.stopCount();
+      }
+    }, 1000);
+  }
+
+  /**
    * 포모도로 카운트 진행
    */
   updateCount() {
@@ -249,34 +283,21 @@ export default class Store {
   }
 
   /**
-   * 포모도로 카운트 일시정지
+   * 포모도로 카운트 일시정지/재실행 토글
    */
-  pauseCount() {
-    clearInterval(this.intervalId);
+  toggleCount() {
+    if (this.intervalId) {
+      clearInterval(this.intervalId);
+      this.intervalId = null;
+    } else {
+      this.resumeCount();
+    }
+
+    this.#saveStorage();
+    this.updateCount();
   }
 
-  /**
-   * 카운트 복원
-   */
-  resumeCount() {
-    this.intervalId = setInterval(() => {
-      this.remainingTime--;
-      this.updateCount();
-
-      if (this.remainingTime <= 0) {
-        clearInterval(this.intervalId);
-        this.updateTodoItemByList(
-          this.playedTodoInfo.listName,
-          this.playedTodoInfo.todoItemIndex,
-          {
-            ...this.getTodoListByList(this.playedTodoInfo.listName)[
-              this.playedTodoInfo.todoItemIndex
-            ],
-            pomodoroCount: pomodoroCount + 1,
-          }
-        );
-        this.stopCount();
-      }
-    }, 1000);
+  getIsPaused() {
+    return !this.intervalId;
   }
 }

@@ -57,9 +57,9 @@ export default class Header {
 
       $rightContainer.appendChild(
         new Button({
-          text: "⏸️",
+          text: this.store.getIsPaused() ? "▶️" : "⏸️",
           type: "button",
-          onClick: () => this.store.pauseCount(),
+          onClick: () => this.store.toggleCount(),
         }).render()
       );
 
