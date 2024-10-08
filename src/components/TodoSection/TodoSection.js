@@ -74,11 +74,11 @@ export default class TodoSection {
   }
 
   #handleTodoItemPlay(index) {
-    this.store.setPlayedTodoInfo(this.store.getSelectedListItem(), index);
+    this.store.startCount(this.store.getSelectedListItem(), index);
   }
 
   #handleTodoItemStop() {
-    this.store.deletePlayedTodoInfo();
+    this.store.stopCount();
   }
 
   // 요소 생성 메소드..
@@ -117,6 +117,8 @@ export default class TodoSection {
     this.#getTodoList().forEach((todoItem, index) => {
       const $todoItem = new TodoItem({
         ...todoItem,
+        listName: this.store.getSelectedListItem(),
+        index,
         isPlayed: this.store.getPlayedTodoInfo()?.todoItemIndex === index,
         onUpdate: (updatedTodoItem) =>
           this.#handleTodoItemComplete(index, updatedTodoItem),

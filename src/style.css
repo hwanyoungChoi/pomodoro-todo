@@ -36,6 +36,12 @@ header h1 em {
   color: dodgerblue;
 }
 
+header .right-container {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
 main {
   margin-top: 20px;
   display: flex;

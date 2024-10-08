@@ -1,4 +1,5 @@
 import Button from "../Button";
+import Counter from "../Counter";
 import TodoItemForm from "./TodoItemForm";
 
 export default class TodoItem {
@@ -20,6 +21,8 @@ export default class TodoItem {
     pomodoroTime,
     pomodoroCount,
     isCompleted,
+    listName,
+    index,
     isPlayed,
     onUpdate,
     onDelete,
@@ -30,6 +33,8 @@ export default class TodoItem {
     this.pomodoroTime = pomodoroTime;
     this.pomodoroCount = pomodoroCount;
     this.isCompleted = isCompleted;
+    this.listName = listName;
+    this.index = index;
     this.isPlayed = isPlayed;
     this.onUpdate = onUpdate;
     this.onDelete = onDelete;
@@ -86,6 +91,10 @@ export default class TodoItem {
   #createRightContainer() {
     const $rightContainer = document.createElement("div");
     $rightContainer.classList.add("right-container");
+
+    $rightContainer.appendChild(
+      new Counter(this.listName, this.index).render()
+    );
 
     if (!this.isCompleted) {
       $rightContainer.appendChild(

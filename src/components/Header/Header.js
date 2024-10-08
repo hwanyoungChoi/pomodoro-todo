@@ -1,4 +1,5 @@
 import Button from "../Button";
+import Counter from "../Counter";
 
 export default class Header {
   /**
@@ -36,13 +37,21 @@ export default class Header {
       `;
 
       const $rightContainer = document.createElement("div");
+      $rightContainer.classList.add("right-container");
       $title.appendChild($rightContainer);
+
+      $rightContainer.appendChild(
+        new Counter(
+          this.store.getPlayedTodoInfo().listName,
+          this.store.getPlayedTodoInfo().todoItemIndex
+        ).render()
+      );
 
       $rightContainer.appendChild(
         new Button({
           text: "⏹️",
           type: "button",
-          onClick: () => this.store.deletePlayedTodoInfo(),
+          onClick: () => this.store.stopCount(),
         }).render()
       );
 
@@ -50,7 +59,7 @@ export default class Header {
         new Button({
           text: "⏸️",
           type: "button",
-          onClick: () => {},
+          onClick: () => this.store.pauseCount(),
         }).render()
       );
 

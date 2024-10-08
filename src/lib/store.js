@@ -3,15 +3,19 @@ export default class Store {
     this.storageKey = storageKey;
     this.rerenderCallback = rerenderCallback;
 
-    const { listMap, selectedListItem, playedTodoItem, playedTodoInfo } =
+    const { listMap, selectedListItem, playedTodoInfo, remainingTime } =
       this.#loadStorage() ?? {
         listMap: new Map(),
         selectedListItem: null,
         playedTodoInfo: null,
+        remainingTime: null,
       };
     this.listMap = listMap;
     this.selectedListItem = selectedListItem;
     this.playedTodoInfo = playedTodoInfo;
+    this.remainingTime = remainingTime;
+
+    this.intervalId = null;
   }
 
   #loadStorage() {
@@ -22,20 +26,22 @@ export default class Store {
         listMap,
         selectedListItem: data.selectedListItem,
         playedTodoInfo: data.playedTodoInfo,
+        remainingTime: data.remainingTime,
       };
     }
     return null;
   }
 
-  #saveStorage() {
+  #saveStorage(shouldRerender = true) {
     const dataToSave = {
       listMap: Array.from(this.listMap),
       selectedListItem: this.selectedListItem,
       playedTodoInfo: this.playedTodoInfo,
+      remainingTime: this.remainingTime,
     };
     localStorage.setItem(this.storageKey, JSON.stringify(dataToSave));
 
-    if (this.rerenderCallback) {
+    if (shouldRerender && this.rerenderCallback) {
       this.rerenderCallback();
     }
   }
@@ -64,6 +70,7 @@ export default class Store {
    */
   deleteListItem(name) {
     this.listMap.delete(name);
+    this.stopCount();
 
     if (name === this.selectedListItem) {
       this.setSelectedListItem(null);
@@ -124,7 +131,7 @@ export default class Store {
       this.playedTodoInfo?.listName === name &&
       this.playedTodoInfo?.todoItemIndex === todoItemIndex
     ) {
-      this.playedTodoInfo = null;
+      this.stopCount();
     }
 
     this.#saveStorage();
@@ -147,7 +154,7 @@ export default class Store {
       this.playedTodoInfo?.todoItemIndex === todoItemIndex &&
       todoItem.isCompleted
     ) {
-      this.playedTodoInfo = null;
+      this.stopCount();
     }
 
     this.#saveStorage();
@@ -162,23 +169,83 @@ export default class Store {
   }
 
   /**
-   * 포모도로 실행 정보 업데이트 메소드
-   * @param {string} name - 목록 이름
-   * @param {number} todoItemIndex - 할일 index
+   * 포모도로 카운트 시작 메소드
+   * @param {*} name - 목록 이름
+   * @param {*} todoItemIndex - 할일 index
    */
-  setPlayedTodoInfo(name, todoItemIndex) {
+  startCount(name, todoItemIndex) {
+    // 초기화
+    this.stopCount();
     this.playedTodoInfo = {
       listName: name,
       todoItemIndex,
     };
     this.#saveStorage();
+
+    const todoItem = this.getTodoListByList(this.selectedListItem)[
+      this.playedTodoInfo.todoItemIndex
+    ];
+    this.remainingTime = todoItem.pomodoroTime * 60;
+
+    this.updateCount();
+
+    this.intervalId = setInterval(() => {
+      this.remainingTime--;
+      this.updateCount();
+
+      if (this.remainingTime <= 0) {
+        clearInterval(this.intervalId);
+        this.updateTodoItemByList(
+          this.selectedListItem,
+          this.playedTodoInfo.todoItemIndex,
+          {
+            ...todoItem,
+            pomodoroCount: todoItem.pomodoroCount + 1,
+          }
+        );
+        this.stopCount();
+      }
+    }, 1000);
   }
 
   /**
-   * 포모도로 실행 제거 메소드
+   * 포모도로 카운트 진행
    */
-  deletePlayedTodoInfo() {
+  updateCount() {
+    const minutes = Math.floor(this.remainingTime / 60);
+    const seconds = this.remainingTime % 60;
+
+    const $counters = document.querySelectorAll(
+      `.counter-${this.playedTodoInfo.listName}-${this.playedTodoInfo.todoItemIndex}`
+    );
+
+    if ($counters) {
+      $counters.forEach(
+        ($counter) =>
+          ($counter.innerText = `${String(minutes).padStart(2, "0")}:${String(
+            seconds
+          ).padStart(2, "0")}`)
+      );
+    }
+
+    this.#saveStorage(false);
+  }
+
+  /**
+   * 포모도로 카운트 중지
+   */
+  stopCount() {
+    clearInterval(this.intervalId);
+    this.remainingTime = null;
     this.playedTodoInfo = null;
+
     this.#saveStorage();
+  }
+
+  /**
+   * 포모도로 카운트 일시정지
+   */
+  pauseCount() {
+    clearInterval(this.intervalId);
   }
 }
