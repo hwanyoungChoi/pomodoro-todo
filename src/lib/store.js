@@ -195,9 +195,7 @@ export default class Store {
     };
     this.#saveStorage();
 
-    const todoItem = this.getTodoListByList(this.selectedListItem)[
-      this.playedTodoInfo.todoItemIndex
-    ];
+    const todoItem = this.getTodoListByList(name)[todoItemIndex];
     this.remainingTime = todoItem.pomodoroTime * 60;
 
     this.updateCount();
