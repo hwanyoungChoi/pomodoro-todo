@@ -83,11 +83,19 @@ export default class Store {
    */
   deleteListItem(name) {
     this.listMap.delete(name);
-    this.stopCount();
 
+    // 카운트 진행 중인 경우 정지
+    if (this.playedTodoInfo) {
+      if (name === this.playedTodoInfo.listName) {
+        this.stopCount();
+      }
+    }
+
+    // select중인 경우 해제
     if (name === this.selectedListItem) {
       this.setSelectedListItem(null);
     }
+
     this.#saveStorage();
   }
 
