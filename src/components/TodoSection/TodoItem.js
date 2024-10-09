@@ -81,6 +81,11 @@ export default class TodoItem {
     $nameContainer.appendChild($name);
 
     $name.addEventListener("click", () => {
+      const formExists = document.querySelector("#todo-item-form");
+      if (formExists) {
+        return;
+      }
+
       this.isEdit = true;
       this.render();
     });
