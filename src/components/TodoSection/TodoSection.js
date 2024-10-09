@@ -119,7 +119,10 @@ export default class TodoSection {
         ...todoItem,
         listName: this.store.getSelectedListItem(),
         index,
-        isPlayed: this.store.getPlayedTodoInfo()?.todoItemIndex === index,
+        isPlayed:
+          this.store.getPlayedTodoInfo()?.listName ===
+            this.store.getSelectedListItem() &&
+          this.store.getPlayedTodoInfo()?.todoItemIndex === index,
         onUpdate: (updatedTodoItem) =>
           this.#handleTodoItemComplete(index, updatedTodoItem),
         onDelete: () => this.#handleTodoItemDelete(index),
