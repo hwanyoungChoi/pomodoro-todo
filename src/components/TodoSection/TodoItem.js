@@ -83,6 +83,7 @@ export default class TodoItem {
     $name.addEventListener("click", () => {
       const formExists = document.querySelector("#todo-item-form");
       if (formExists) {
+        alert("현재 수정 중인 폼이 있습니다.");
         return;
       }
 

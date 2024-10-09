@@ -48,6 +48,7 @@ export default class TodoSection {
   #handleAddButtonClick() {
     const formExists = this.$todoSection.querySelector("#todo-item-form");
     if (formExists) {
+      alert("현재 수정 중인 폼이 있습니다.");
       return;
     }
 
