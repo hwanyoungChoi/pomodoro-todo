@@ -1,3 +1,4 @@
+import { COMPONENT_KEYS } from "../../lib/constant";
 import Button from "../Button";
 import ListItem from "./ListItem";
 
@@ -8,6 +9,7 @@ export default class ListSection {
    */
   constructor(store) {
     this.store = store;
+    this.store.subscribe(COMPONENT_KEYS.LIST_SECTION, () => this.render());
 
     this.$listSection = null;
     this.$inputField = null;

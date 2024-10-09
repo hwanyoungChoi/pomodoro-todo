@@ -1,7 +1,9 @@
+import { COMPONENT_KEYS } from "./constant";
+
 export default class Store {
-  constructor(storageKey, rerenderCallback) {
+  constructor(storageKey) {
     this.storageKey = storageKey;
-    this.rerenderCallback = rerenderCallback;
+    this.subscribers = {};
 
     const {
       listMap,
@@ -44,7 +46,7 @@ export default class Store {
     return null;
   }
 
-  #saveStorage(shouldRerender = true) {
+  #saveStorage() {
     const dataToSave = {
       listMap: Array.from(this.listMap),
       selectedListItem: this.selectedListItem,
@@ -53,9 +55,22 @@ export default class Store {
       intervalId: this.intervalId,
     };
     localStorage.setItem(this.storageKey, JSON.stringify(dataToSave));
+  }
 
-    if (shouldRerender && this.rerenderCallback) {
-      this.rerenderCallback();
+  /**
+   * storage에 저장 시 App자체가 항상 리렌더링되는 방식으로 우선 개발하였다가, 필요한 컴포넌트만 지정하여 리렌더링하기 위해 참고
+   * https://junilhwang.github.io/TIL/Javascript/Design/Vanilla-JS-Store/
+   */
+  subscribe(key, callback) {
+    if (!this.subscribers[key]) {
+      this.subscribers[key] = [];
+    }
+    this.subscribers[key].push(callback);
+  }
+
+  #notify(key) {
+    if (this.subscribers[key]) {
+      this.subscribers[key].forEach((callback) => callback());
     }
   }
 
@@ -75,6 +90,7 @@ export default class Store {
   addListItem(name, todoList) {
     this.listMap.set(name, todoList ?? []);
     this.#saveStorage();
+    this.#notify(COMPONENT_KEYS.LIST_SECTION);
   }
 
   /**
@@ -97,6 +113,7 @@ export default class Store {
     }
 
     this.#saveStorage();
+    this.#notify(COMPONENT_KEYS.APP);
   }
 
   /**
@@ -114,6 +131,8 @@ export default class Store {
   setSelectedListItem(name) {
     this.selectedListItem = name;
     this.#saveStorage();
+    this.#notify(COMPONENT_KEYS.LIST_SECTION);
+    this.#notify(COMPONENT_KEYS.TODO_SECTION);
   }
 
   /**
@@ -134,6 +153,9 @@ export default class Store {
     const todoList = [...this.getTodoListByList(name), todoItem];
     this.listMap.set(name, todoList);
     this.#saveStorage();
+
+    this.#notify(COMPONENT_KEYS.LIST_SECTION);
+    this.#notify(COMPONENT_KEYS.TODO_SECTION);
   }
 
   /**
@@ -156,6 +178,7 @@ export default class Store {
     }
 
     this.#saveStorage();
+    this.#notify(COMPONENT_KEYS.APP);
   }
 
   /**
@@ -179,6 +202,8 @@ export default class Store {
     }
 
     this.#saveStorage();
+    this.#notify(COMPONENT_KEYS.HEADER);
+    this.#notify(COMPONENT_KEYS.TODO_SECTION);
   }
 
   /**
@@ -202,6 +227,7 @@ export default class Store {
       todoItemIndex,
     };
     this.#saveStorage();
+    this.#notify(COMPONENT_KEYS.APP);
 
     const todoItem = this.getTodoListByList(name)[todoItemIndex];
     this.remainingTime = todoItem.pomodoroTime * 60;
@@ -274,7 +300,7 @@ export default class Store {
       );
     }
 
-    this.#saveStorage(false);
+    this.#saveStorage();
   }
 
   /**
@@ -286,6 +312,7 @@ export default class Store {
     this.playedTodoInfo = null;
 
     this.#saveStorage();
+    this.#notify(COMPONENT_KEYS.APP);
   }
 
   /**
@@ -300,6 +327,7 @@ export default class Store {
     }
 
     this.#saveStorage();
+    this.#notify(COMPONENT_KEYS.APP);
     this.updateCount();
   }
 

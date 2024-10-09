@@ -1,11 +1,13 @@
 import Header from "./components/Header";
 import ListSection from "./components/ListSection";
 import TodoSection from "./components/TodoSection";
+import { COMPONENT_KEYS } from "./lib/constant";
 import Store from "./lib/store";
 
 export default class App {
   constructor() {
-    this.store = new Store("todoApp", this.render.bind(this));
+    this.store = new Store("todoApp");
+    this.store.subscribe(COMPONENT_KEYS.APP, () => this.render());
 
     this.$app = null;
     this.$header = new Header(this.store);

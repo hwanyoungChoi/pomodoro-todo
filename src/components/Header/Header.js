@@ -1,3 +1,4 @@
+import { COMPONENT_KEYS } from "../../lib/constant";
 import Button from "../Button";
 import Counter from "../Counter";
 
@@ -8,6 +9,7 @@ export default class Header {
    */
   constructor(store) {
     this.store = store;
+    this.store.subscribe(COMPONENT_KEYS.HEADER, () => this.render());
 
     this.$header = null;
   }

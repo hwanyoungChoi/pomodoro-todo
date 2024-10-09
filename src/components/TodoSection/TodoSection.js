@@ -1,3 +1,4 @@
+import { COMPONENT_KEYS } from "../../lib/constant";
 import Button from "../Button";
 import TodoItem from "./TodoItem";
 import TodoItemForm from "./TodoItemForm";
@@ -9,6 +10,7 @@ export default class TodoSection {
    */
   constructor(store) {
     this.store = store;
+    this.store.subscribe(COMPONENT_KEYS.TODO_SECTION, () => this.render());
 
     this.$todoSection = null;
   }
